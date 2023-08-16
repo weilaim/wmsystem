@@ -33,6 +33,16 @@ func BackRouter() http.Handler {
 	{
 		// TODO 用户注册和后台登录应该记录导日志
 		base.POST("/login", userAuthAPI.Login)
+		base.POST("/register", userAuthAPI.Register)
+	}
+
+	// 需要鉴权的接口
+	auth := base.Group("") // "admin"
+
+	auth.Use(middleware.JWTAuth())
+	auth.Use(middleware.RBAC())
+	{
+		auth.GET("/home", blogInfoAPI.GetHomeInfo)
 	}
 	return r
 }

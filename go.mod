@@ -9,6 +9,7 @@ require (
 	github.com/gin-contrib/sessions v0.0.5
 	github.com/gin-gonic/gin v1.9.1
 	github.com/go-redis/redis/v8 v8.11.5
+	github.com/golang-jwt/jwt/v4 v4.2.0
 	github.com/spf13/viper v1.16.0
 	go.uber.org/zap v1.21.0
 	golang.org/x/sync v0.3.0

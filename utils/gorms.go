@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/weilaim/wmsystem/config"
-	"github.com/weilaim/wmsystem/dao"
 	"github.com/weilaim/wmsystem/model"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -31,13 +30,10 @@ func InitMySQLDB() *gorm.DB {
 	}
 
 	log.Println("MySQL 连接成功")
-	if dao.DB != nil {
-		fmt.Println("you ---------")
-	}
 
-
-	// 迁移数据表，在没有数据表结构变更时候，建议注释不执行
+	// ----迁移数据表，在没有数据表结构变更时候，建议注释不执行
 	MakeMigrate(db)
+	//----
 
 	sqlDB, _ := db.DB()
 	sqlDB.SetMaxIdleConns(10)                  // 设置连接池中的最大闲置连接
@@ -88,7 +84,7 @@ func MakeMigrate(db *gorm.DB) {
 		// &model.Comment{},
 		// &model.Tag{},
 		// &model.Message{},
-		// &model.UserInfo{},
+		&model.UserInfo{},
 		// &model.FriendLink{},
 		// // 权限相关
 		&model.UserAuth{},     // 用户
@@ -100,7 +96,7 @@ func MakeMigrate(db *gorm.DB) {
 		&model.RoleResource{}, // 角色-资源 关联
 
 		// &model.Page{},         // 页面
-		// &model.BlogConfig{},   // 网站设置
+		&model.BlogConfig{}, // 网站设置
 		// &model.OperationLog{}, // 操作日志
 	)
 
