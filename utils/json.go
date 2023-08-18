@@ -13,6 +13,17 @@ var Json = new(_json)
 type _json struct {
 }
 
+// data -> jsonStr
+func (*_json) Marshal(v any) string {
+	data, err := json.Marshal(v)
+	if err != nil {
+		Logger.Error(JSON_UTIL_ERR_PREFIX+"Marshal: ", zap.Error(err))
+		panic(err)
+	}
+
+	return string(data)
+}
+
 // jsonStr -> data
 func (*_json) Unmarshal(data string, v any) {
 	err := json.Unmarshal([]byte(data), &v)

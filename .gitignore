@@ -18,5 +18,6 @@
 
 public/uploaded/
 public/markdown/
+config/config.toml
 
 *.db

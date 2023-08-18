@@ -2,6 +2,7 @@ package utils
 
 import (
 	"errors"
+	"time"
 
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/weilaim/wmsystem/config"
@@ -30,6 +31,24 @@ type MyJWt struct {
 
 func GetJWT() *MyJWt {
 	return &MyJWt{[]byte(config.Cfg.JWT.Secret)}
+}
+
+// 生成token
+func (j *MyJWt) GenToken(userId int, role string, uuid string) (string, error) {
+	claims := MyClaims{
+		UserId: userId,
+		Role:   role,
+		UUID:   uuid,
+		RegisteredClaims: jwt.RegisteredClaims{
+			Issuer:    config.Cfg.JWT.Issuer,
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Duration(config.Cfg.JWT.Expire) * time.Hour)),
+		},
+	}
+
+	// 使用 指定的签名方法创建签名对象
+	token := jwt.NewWithClaims(jwt.SigningMethodES256, claims)
+	// 是哦那个指定的 secret 签名并获得完整的编码后的字符串 token
+	return token.SignedString(j.Secret)
 }
 
 func (j *MyJWt) ParseToken(tokenString string) (*MyClaims, error) {
