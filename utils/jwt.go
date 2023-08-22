@@ -16,8 +16,7 @@ var (
 	ErrTokenInvalid     = errors.New("这不是一个 token, 请重新登录")
 )
 
-// JWT工具类
-
+// 定义 JWT 中存储的信息
 type MyClaims struct {
 	UserId int    `json:"user_id"`
 	Role   string `json:"role"`
@@ -25,16 +24,17 @@ type MyClaims struct {
 	jwt.RegisteredClaims
 }
 
-type MyJWt struct {
+type MyJWT struct {
 	Secret []byte
 }
 
-func GetJWT() *MyJWt {
-	return &MyJWt{[]byte(config.Cfg.JWT.Secret)}
+// JWT 工具类
+func GetJWT() *MyJWT {
+	return &MyJWT{[]byte(config.Cfg.JWT.Secret)}
 }
 
-// 生成token
-func (j *MyJWt) GenToken(userId int, role string, uuid string) (string, error) {
+// 生成 JWT
+func (j *MyJWT) GenToken(userId int, role string, uuid string) (string, error) {
 	claims := MyClaims{
 		UserId: userId,
 		Role:   role,
@@ -44,14 +44,14 @@ func (j *MyJWt) GenToken(userId int, role string, uuid string) (string, error) {
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Duration(config.Cfg.JWT.Expire) * time.Hour)),
 		},
 	}
-
-	// 使用 指定的签名方法创建签名对象
-	token := jwt.NewWithClaims(jwt.SigningMethodES256, claims)
-	// 是哦那个指定的 secret 签名并获得完整的编码后的字符串 token
+	// 使用指定的签名方法创建签名对象
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	// 使用指定的 secret 签名并获得完整编码后的字符串 token
 	return token.SignedString(j.Secret)
 }
 
-func (j *MyJWt) ParseToken(tokenString string) (*MyClaims, error) {
+// 解析 JWT
+func (j *MyJWT) ParseToken(tokenString string) (*MyClaims, error) {
 	token, err := jwt.ParseWithClaims(tokenString, &MyClaims{}, func(t *jwt.Token) (interface{}, error) {
 		return j.Secret, nil
 	})
@@ -71,8 +71,8 @@ func (j *MyJWt) ParseToken(tokenString string) (*MyClaims, error) {
 	}
 
 	// 校验 token
-	if caims, ok := token.Claims.(*MyClaims); ok && token.Valid {
-		return caims, nil
+	if claims, ok := token.Claims.(*MyClaims); ok && token.Valid {
+		return claims, nil
 	}
 
 	return nil, ErrTokenInvalid

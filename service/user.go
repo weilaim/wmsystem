@@ -113,6 +113,7 @@ func checkUserExistByName(username string) bool {
 func convertUserDetailDTO(userAuth model.UserAuth, c *gin.Context) dto.UserDetailDTO {
 	ipAddress := utils.IP.GetIpAddress(c)
 	ipSource := utils.IP.GetIpSourceSimpleIdle(ipAddress)
+	// ipSource := "东莞" // fmt.Println(ipSource, "ipsource")
 	browser, os := "unknown", "unknown"
 
 	if userAgent := utils.IP.GetUserAgent(c); userAgent != nil {

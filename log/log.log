@@ -1,2 +1,0 @@
-[GIN-VUE-BLOG] 2023/08/18 - 10:29:21	ERROR	/home/imo/code/wmsystem/utils/ip.go:103	failed to search ip(172.19.224.1:64563): the 3th part `1:64563` is not an integer
-

@@ -26,3 +26,12 @@ func Validate(c *gin.Context, data any) {
 		panic(nil)
 	}
 }
+
+// json bind
+func BindJson[T any](c *gin.Context) (data T) {
+	if err := c.ShouldBindJSON(&data); err != nil {
+		Logger.Error("BindJson", zap.Error(err))
+		panic(r.ERROR_REQUEST_PARAM)
+	}
+	return
+}

@@ -44,5 +44,12 @@ func BackRouter() http.Handler {
 	{
 		auth.GET("/home", blogInfoAPI.GetHomeInfo)
 	}
+
+	// 资源模块 
+	resource := auth.Group("/resource")
+	{
+		resource.POST("",resourceAPI.SaveOrUpdate)
+	}
+
 	return r
 }
